@@ -1,0 +1,87 @@
+{% extends "start.html" %}
+{% block content %}
+<p><center>
+	<h1>Please Login Register</h1>
+	<br>
+	<form action="" method="post">
+<!-- Here the input type is text , the placeholder in form is Username and the name used by python to access is username, 
+	Here we use {{request.form.username}} to keep the value after the form has been submitted but not authenticated . So the value is saved on the page  -->
+		<input type="text" placeholder="Username" name="username" value="{{request.form.username}}">
+		<input type="password" placeholder="Password" name="password" value="{{request.form.password}}">
+		<input class="btn btn-default" type="submit" value="Login">
+	</form>
+</p></center>
+
+
+   <h2>Portfolio Heading</h2>
+
+    <div class="row">
+      <div class="col-lg-4 col-sm-6 portfolio-item">
+        <div class="card h-100">
+          <a href="#"><img class="card-img-top" src="/static/default.jpg" alt=""></a>
+          <div class="card-body">
+            <h4 class="card-title">
+              <a href="#">{{data[0].username}}</a>
+            </h4>
+            <p class="card-text">Price:{{data[0].price}} <p>Location:{{data[0].location}}</p></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-6 portfolio-item">
+        <div class="card h-100">
+          <a href="#"><img class="card-img-top" src="/static/{{data[0].ghar_image}}" alt=""></a>
+          <div class="card-body">
+            <h4 class="card-title">
+              <a href="#">{{data[1].username}}</a>
+            </h4>
+            <p class="card-text">Price:{{data[1].price}} <p>Location:{{data[0].location}}</p></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-6 portfolio-item">
+        <div class="card h-100">
+          <a href="#"><img class="card-img-top" src="/static/{{data[1].ghar_image}}" alt=""></a>
+          <div class="card-body">
+            <h4 class="card-title">
+              <a href="#">Project Three</a>
+            </h4>
+            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos quisquam, error quod sed cumque, odio distinctio velit nostrum temporibus necessitatibus et facere atque iure perspiciatis mollitia recusandae vero vel quam!</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-6 portfolio-item">
+        <div class="card h-100">
+          <a href="#"><img class="card-img-top" src="/static/{{data[2].ghar_image}}" alt=""></a>
+          <div class="card-body">
+            <h4 class="card-title">
+              <a href="#">Project Four</a>
+            </h4>
+            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-6 portfolio-item">
+        <div class="card h-100">
+          <a href="#"><img class="card-img-top" src="/static/{{data[3].ghar_image}}" alt=""></a>
+          <div class="card-body">
+            <h4 class="card-title">
+              <a href="#">Project Five</a>
+            </h4>
+            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-6 portfolio-item">
+        <div class="card h-100">
+          <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+          <div class="card-body">
+            <h4 class="card-title">
+              <a href="#">Project Six</a>
+            </h4>
+            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque earum nostrum suscipit ducimus nihil provident, perferendis rem illo, voluptate atque, sit eius in voluptates, nemo repellat fugiat excepturi! Nemo, esse.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

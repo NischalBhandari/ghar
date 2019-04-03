@@ -1,0 +1,138 @@
+To install virtual environment
+sudo apt-get install python3.6-venv
+
+Create a virtual environment 
+Python3.6 -m venv nameofvirtualenv
+
+To activate virtual environment
+. nameofvirtualenv/bin/activate
+
+
+
+How to add and query database in sqlalchemy
+
+go to python
+from models import db
+from models import CLASS_NAME_OF_MODEL
+
+
+How to do query in python /SqlAlchemy
+
+from models import db
+from models import ClassNameOfTable1, ClassNameOfTable2
+############TO create database###################
+db.create_all()
+############To assign Data to the table##################
+x = ClassNameOfTable1(paramenter1=xyz,parameter2=abc)
+db.session.add(x)
+db.session.commit()
+
+#############For QUERY ############################
+A = ClassNameOfTable1.query.all()
+A[0].parameter1
+###################################################
+
+
+##################FOR ONE TO MANY RELATIONSHIPS ###################3
+ c[0].ramro[0].Views
+Here C[0] is a table with the relationship defined in it 
+ramro[0] is another table which in the many part 
+Views is the parameter of ramro[0]
+
+################################################################
+
+
+#####################Many to many #################################
+
+
+
+
+
+### many to many #######
+
+#### create a association table ######
+
+subs = db.Table('subs',
+	db.Column('user_id', db.Integer, db.ForeignKey('user.user_id')),
+	db.Column('channel_id', db.Integer, db.ForeignKey('channel.channel_id'))
+	)
+
+
+
+
+class User(db.Model):
+ 	user_id = db.Column(db.Integer, primary_key=True)
+ 	name = db.Column(db.String(20))
+ 	subscriptions = db.relationship('Channel', secondary=subs, backref=db.backref('subscribers', lazy = 'dynamic'))
+
+
+class Channel(db.Model):
+ 	channel_id = db.Column(db.Integer,primary_key=True)
+ 	channel_name = db.Column(db.String(20))
+
+
+>>> db.create_all()
+>>> user1 = User(name='Anthony')
+>>> user2 = User(name='stacy')
+>>> user3 = User(name='george')
+>>> user4 = User(name='amber')
+>>> db.session.add(user1)
+>>> db.session.add(user2)
+>>> db.session.add(user3)
+>>> db.session.add(user4)
+>>> db.session.commit()
+>>> channel1 = Channel(channel_name='youtube')
+>>> channel2 = Channel(channel_name='facebook')
+>>> db.session.add(channel1)
+>>> db.session.add(channel2)
+>>> db.session.commit()
+>>> channel1.subscribers.append(user1)
+>>> db.session.commit()
+>>> channel1.subscribers.append(user3)
+>>> channel1.subscribers.append(user4)
+>>> channel2.subscribers.append(user2)
+>>> channel2.subscribers.append(user4)
+>>> db.session.commit()
+>>> channel1.subscribers
+
+
+
+
+
+
+
+##########################################################
+
+
+##############Execute a raw sql statement in sqlalchemy ###############3
+
+r = db.engine.execute('SELECT user_id,name FROM channel')
+for i in r:
+	i
+#####################################################################
+
+
+
+    reraise(exc_type, exc_value, tb)
+  File "/home/nischal/Documents/gharkhoj/ghar/lib/python3.6/site-packages/flask/_compat.py", line 35, in reraise
+    raise value
+  File "/home/nischal/Documents/gharkhoj/ghar/lib/python3.6/site-packages/flask/app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/nischal/Documents/gharkhoj/ghar/lib/python3.6/site-packages/flask/app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "app.py", line 86, in login
+    if (check_password_hash(c.password,POST_PASSWORD)):
+AttributeError: 'NoneType' object has no attribute 'password'
+
+
+
+############################3noip
+
+ sudo /usr/local/bin/noip2 
+
+
+
+
+
+
+

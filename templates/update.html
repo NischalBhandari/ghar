@@ -1,0 +1,14 @@
+<form method="POST"  enctype="multipart/form-data">
+				{{ form.csrf_token }}
+			{{ form.location.label (class="label-input100")}} {{ form.location(class="input100") }}
+
+			{{ form.price.label (class="label-input100")}} {{ form.price(class="input100") }}
+
+			{{form.available.label(class="label-input100")}} {{form.available(class="input100")}}
+
+			{{ form.username.label (class="label-input100")}} {{ form.username(class="input100") }}
+
+			{{ form.photo.label (class="label-input100")}} {{ form.photo }}
+
+<input type="submit" value="Go">
+</form>

@@ -1,0 +1,11 @@
+{% extends "start.html" %}
+{% block content %}
+
+{% for i in comment %}
+<p>
+{{i['user']}}
+{{i['comment']}}
+</p>
+{% endfor %}
+
+{% endblock %}

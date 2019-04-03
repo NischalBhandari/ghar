@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ghar Khoj</title>
+	<meta charset="utf-8"/>
+
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron">
+			<h1>Buttons</h1>
+			<button id = "btn1">#btn1</button>
+		</div>
+	<div>
+<div class="col-xs-3">
+	<div id = "panel4" class="panel panel-primary">
+		<div class="panel-heading">
+			#panel4
+		</div>
+		<div id="panelbod" class="panel-body">content
+		</div>
+	</div>
+
+	<!-- needed to define the root of the pages -->
+	<script type=text/javascript>
+  		$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+	</script>
+
+	<script>
+		$(function(){
+
+			startRefresh();
+			getdata();
+
+		});
+
+		function startRefresh(){
+			setTimeout(startRefresh,10000);
+		/*	$("#panel4").hide(300).show(1000).slideUp(1000).slideDown(1000);*/
+			$("#panel4").css({color:'red'});
+
+		}
+			$("#btn1").click(function(){
+			alert("click done ")
+			});
+
+
+		function getdata(){
+			setTimeout(getdata,10000)
+			$.getJSON(
+				$SCRIPT_ROOT + "jsonshow",
+				function(date){
+					$('#panelbod').text(date.date);
+				});
+		}
+	</script>
+
+
+	<!-- get json data from the server -->
+<!-- 	<script>
+		$(function(){
+			$.getJSON(
+				$SCRIPT_ROOT + "jsonshow",
+				function(date){
+					$('#panelbod').text(date.date);
+				});
+		});
+	</script> -->
+
+</body>
+</html>

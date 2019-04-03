@@ -1,0 +1,37 @@
+{% extends "start.html" %}
+{% block content %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+
+<!-- Page Content -->
+<div class="container">
+
+  <!-- Portfolio Item Heading -->
+  <h1 class="my-4">Page Heading
+    <small>Secondary Text</small>
+  </h1>
+
+  <!-- Portfolio Item Row -->
+  <div class="row">
+
+    <div class="col-md-8">
+      <img class="img-fluid" src="/static/{{data.ghar_image}}" alt="">
+    </div>
+
+    <div class="col-md-4">
+      <h3 class="my-3">{{data.location}}</h3>
+      <p>{{data.price}}.</p>
+      <h3 id = test class="my-3">Project Details</h3>
+      <ul>
+       <li id="likestage">"Likes" <li id="likes" >{{data.ramro.Likes}}</li></li>
+        <li id="views">Views:{{data.ramro.Views}}</li>
+      </ul>
+    </div>
+
+  </div>
+
+  {% endblock %}

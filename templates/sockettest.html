@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>Chat Room</title>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<script type="text/javascript">
+$(document).ready(function() {
+	var socket = io.connect('http://127.0.0.1:5000');
+	socket.on('connect', function() {
+		socket.send('User has connected!');
+	});
+	//listening to message
+	socket.on('message', function(misg) {
+		$("#messages").append('<li>'+misg+'</li>');
+		console.log('Received message');
+	});
+	$('#sendbutton').on('click', function() {
+		socket.send($('#myMessage').val());
+		$('#myMessage').val('');
+	});
+	$('#like').on('click',function(){
+		socket.emit('Like' , 2)
+	});
+	$('#view').on('click',function(){
+		socket.emit('Like' , 3)
+	});
+	socket.on('like_results',function(results){
+		var total_votes=results.like1 + results.like2;
+		console.log(total_votes)
+		var one_pct = Math.round(results.like1/total_votes * 100);
+		var two_pct = 100 - one_pct;
+		$("#results1").css('width',one_pct + '%');
+		$("#results2").css('width',two_pct + '%');
+		$("#like").html(one_pct);
+		$("#view").html(two_pct);
+	});
+
+
+});
+</script>
+<button id="like">Like</button>
+<button id="view">View</button>
+
+<div class="progress">
+	<div id = "results1" class="progress-bar progress-bar-success" style="width:50%">
+	</div>
+	<div id = "results2" class="progress-bar-warning progress-bar-striped" style="width: 50%">
+	</div>
+</div>
+
+<ul id="messages">
+	{% for msg in messages %}
+		<li>{{msg.message}}</li>
+	{% endfor %}
+</ul>
+<input type="text" id="myMessage">
+<button id="sendbutton">Send</button>
+
+</body>
+</html>
+

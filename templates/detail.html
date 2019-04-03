@@ -1,0 +1,204 @@
+{% extends "start.html" %}
+{% block content %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+
+  <script type=text/javascript>
+      $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
+<!-- Page Content -->
+<div class="container">
+
+  <!-- Portfolio Item Heading -->
+  <h1 class="my-4">Page Heading
+    <small>Secondary Text</small>
+  </h1>
+
+  <!-- Portfolio Item Row -->
+  <div class="row">
+
+    <div class="col-md-8">
+      <img class="img-fluid" src="/static/{{data.ghar_image}}" alt="">
+    </div>
+    <div id="likebtn">
+<!-- 
+    <form method="POST" > -->
+    <textarea name="opinions" id="comment_section"> your text </textarea>
+
+    <button id="likebutton" name="LikeButton" value="">Like</button>
+
+    <button  id="comment_submit" name="submit_button" value="">Submit</button>
+<!--   </form> -->
+
+      
+
+
+
+    </div>
+    <div class="col-md-4">
+      <h3 class="my-3">{{data.location}}</h3>
+      <p>{{data.price}}.</p>
+      <h3 id = test class="my-3">Project Details</h3>
+      <ul>
+       <li id="likestage">"Likes" <li id="likes" >{{data.ramro.Likes}}</li></li>
+        <li id="views">Views:{{data.ramro.Views}}</li>
+        <li id="Hello"> Hello:{{person.username}}</li>
+        <li>{{ramrolagyokinai}}</li>
+                <li id ="list_comment">
+                  <strong>Comments</strong>
+{% for i in what %}
+<p>
+{{i['user']}}<strong>:</strong>
+{{i['comment']}}
+</p>
+{% endfor %}
+</li>
+      </ul>
+    </div>
+
+
+
+  </div>
+
+
+
+
+
+  <!-- /.row -->
+
+  <!-- Related Projects Row -->
+  <h3 class="my-4">Related Projects</h3>
+
+  <div class="row">
+
+    <div class="col-md-3 col-sm-6 mb-4">
+      <a href="#">
+            <img class="img-fluid" src="http://placehold.it/500x300" alt="">
+          </a>
+    </div>
+
+    <div class="col-md-3 col-sm-6 mb-4">
+      <a href="#">
+            <img class="img-fluid" src="http://placehold.it/500x300" alt="">
+          </a>
+    </div>
+
+    <div class="col-md-3 col-sm-6 mb-4">
+      <a href="#">
+            <img class="img-fluid" src="http://placehold.it/500x300" alt="">
+          </a>
+    </div>
+
+    <div class="col-md-3 col-sm-6 mb-4">
+      <a href="#">
+            <img class="img-fluid" src="http://placehold.it/500x300" alt="">
+          </a>
+    </div>
+
+  </div>
+  <!-- /.row -->
+
+</div>
+<!-- /.container -->
+
+
+
+<script>
+
+  $(function(){
+    $("#likebutton").val({{data.ramro.Likes}});
+    if({{ramrolagyokinai}}===0)
+    {
+      $("#likebutton").on('click',function(){
+        var x = parseInt($("#likebutton").val());
+        $("#likebutton").val(x+1)
+        $("#likes").html($("#likebutton").val()+"Likes");
+        $("#likebutton").html($("#likebutton").val()+" Likes");
+        if(("#"))
+        $.post("/detail/{{data.id}}", {mydata: 1, whos: {{person.id}},opinions: 0})
+        $("#likebutton").prop('disabled',true);
+      });
+    }
+    else{
+    $("#likebutton").html($("#likebutton").val()+" Likes");
+    }
+  });
+  </script>
+  <script>
+    $(function(){
+    $("#comment_submit").on('click', function(){
+      var y = $("#comment_section").val();
+      console.log(y);
+      if(y.length==0)
+      {
+        console.log("please enter non zero")
+        $.post("/detail/{{data.id}}", {mydata: 0, whos: {{person.id}},opinions: 0})
+      }
+      $.post("/detail/{{data.id}}", {mydata: 0, whos: {{person.id}},opinions: y})
+      
+      $("#list_comment").append("you commented : ", y)
+      $("#comment_section").val('')
+    });
+
+    });
+  </script>
+
+
+<!-- 
+<script>
+  $(function(){
+    var private_socket = io.connect('http://192.168.2.103:5000/private');
+    private_socket.on('connect', function() {
+      private_socket.emit("connected",{{data.id}});
+      console.log('COnnected the user');
+
+        });
+    if({{ramrolagyokinai}}===1)
+    {
+      $("#likebutton").html("already liked");
+      $("#likebutton").prop('disabled',true);
+
+    }
+    $("#likebutton").on('click',function(){
+      console.log("Butoon clicked");
+      private_socket.emit('testlike',1,{{data.id}},{{person.id}});
+      $("#likebutton").html("already liked");
+      $("#likebutton").prop('disabled',true);
+    });
+    private_socket.on('like_result',function(results){
+    $("#likes").html(results.like1);
+    $("#views").html(results.like2);
+  });
+
+
+
+  });
+</script> -->
+
+
+
+<!--GIves out the like in live fashion -->
+<!--   <script>
+    $(function(){
+      getdata();
+
+    });
+
+
+    function getdata(){
+      setTimeout(getdata,10000)
+      $.getJSON(
+        $SCRIPT_ROOT + "json/1",
+        function(data){
+          $('#liking').text(data.data);
+        });
+    }
+  </script> -->
+
+
+
+{% endblock %}
