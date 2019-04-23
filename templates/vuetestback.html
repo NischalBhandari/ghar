@@ -1,0 +1,97 @@
+<html>
+<head>
+	    <style>
+      .container {
+      width: 700px ;
+      margin-left: auto ;
+      margin-right: auto ;
+      padding-top: 10%;
+      }
+    </style>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
+ -->
+    <script src='//unpkg.com/vue-chartjs@2.6.0/dist/vue-chartjs.full.min.js'></script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.js'></script>
+    <script src='//unpkg.com/hchs-vue-charts@1.2.8'></script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.js"
+			  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+			  crossorigin="anonymous"></script>
+</head>
+<body>
+	<div id ="application">
+		[[json.date]]
+		[[json.ghar]]
+	</div>
+	<div id="charts">
+		<section class="container">
+			<div class="columns">
+				<div class="column">
+					<chartjs-line :labels="labels" :data="dataset" :bind="true"></chartjs-line>
+				</div>
+			</div>
+		</section>
+	</div>
+
+
+	
+<script>
+	Vue.use(VueCharts);
+	var xyz = new Vue({
+
+		el: '#charts',
+		data: function data(){
+
+			return {
+
+				dataentry: null,
+				datalabel: null,
+				labels:["x","y","z"],
+				dataset:[1,2,3]
+			};
+		},
+		methods:{
+
+			addData:function addData(){
+
+				this.dataset.push(this.dataentry);
+				this.labels.push(this.datalabel);
+				this.datalabel='';
+				this.dataentry='';
+			}
+		},
+		delimiters: ['[[',']]']
+	});
+
+
+
+
+
+
+	var app= new Vue({
+		el: "#application",
+		data: {
+
+			message: "this is good ",
+			json: null
+
+		},
+		delimiters:['[[',']]']
+
+	});
+
+
+fetchData = function(){
+$.getJSON('http://localhost:5000/jsonshow', function(json){
+
+	app.json = json;
+
+});
+}
+setInterval(fetchData, 1000);
+</script>
+
+</body>
+</html>

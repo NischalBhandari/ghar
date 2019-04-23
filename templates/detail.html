@@ -3,7 +3,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
 
@@ -29,14 +29,10 @@
     <form method="POST" > -->
     <textarea name="opinions" id="comment_section"> your text </textarea>
 
-    <button id="likebutton" name="LikeButton" value="">Like</button>
+    <button class = "login100-form-btn"id="likebutton" name="LikeButton" value="">Like</button>
 
     <button  id="comment_submit" name="submit_button" value="">Submit</button>
 <!--   </form> -->
-
-      
-
-
 
     </div>
     <div class="col-md-4">
@@ -60,9 +56,22 @@
       </ul>
     </div>
 
-
-
   </div>
+{% for homes in home %}
+
+<p>
+  <div>
+  <ul>
+<strong>{{loop.index}} floor:</strong>
+<li>{{homes['kitchen']}} Kitchen</li>
+<li>{{homes['bed_room']}} bed rooms </li>
+<li>{{homes['living_room']}} living rooms</li> 
+</ul>
+</div>
+ </p>
+{% endfor %}
+<img src="/plot.png" alt="my plot">
+
 
 
 
