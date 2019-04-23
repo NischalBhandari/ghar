@@ -12,10 +12,10 @@ db.session.add(KaskoGhar(username="suman",password=generate_password_hash("12345
 db.session.add(KaskoGhar(username="om",password=generate_password_hash("omram"), name= "om" , email="om@om.com"))
 
 # insert
-db.session.add(GharBare("maitighar","3000","nischal",date.today(),1,"default.jpg"))
-db.session.add(GharBare("baneshwor","4000","gharti",date.today(),1,"default.jpg"))
-db.session.add(GharBare("Lalitpur","6000","gandaki",date.today(),3,"lalitpur.jpg"))
-db.session.add(GharBare("Bhaktapur","6000","Newar",date.today(),3,"index.jpg"))
+db.session.add(GharBare("maitighar","3000","nischal",date.today(),1,"default.jpg",2))
+db.session.add(GharBare("baneshwor","4000","gharti",date.today(),1,"default.jpg",3))
+db.session.add(GharBare("Lalitpur","6000","gandaki",date.today(),3,"lalitpur.jpg",2))
+db.session.add(GharBare("Bhaktapur","6000","Newar",date.today(),3,"index.jpg",1))
 
 
 db.session.add(Perception(Likes=1,Views=1,ghar_ko=1))

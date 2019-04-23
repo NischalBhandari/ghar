@@ -1,4 +1,4 @@
-from flask import Flask,url_for,request,render_template,redirect,session,flash,g,escape,jsonify
+from flask import Flask,url_for,request,render_template,redirect,session,flash,g,escape,jsonify,Response
 from functools import wraps
 from flask_cors import CORS, cross_origin
 from flask_socketio import SocketIO , send , emit
@@ -10,7 +10,26 @@ import os
 from datetime import datetime
 from forms import MyForm, GharAdd
 from flask_pymongo import PyMongo
+## for matplot lib ########
+import io
+import random
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+##################################
+import sqlite3
+import json
+
+
+def create_connection(db_file):
+	conn = sqlite3.connect(db_file)
+	print(sqlite3.version)
+	return conn
+
+
 UPLOAD_FOLDER = os.path.basename('static')
+
+
+
 
 # to be able to import resources 
 #if many modules are used then other than __name__ needs to be implemented
@@ -172,12 +191,13 @@ def register():
 def gharjod():
 	form = GharAdd()
 	if form.validate_on_submit():
+		home_data= mongo.db.home
 		f= form.photo.data
 		username=form.username.data
 		filename = secure_filename(f.filename)
 		hashed_name=createhashedfile(filename)
 		f.save(os.path.join(app.config['UPLOAD_FOLDER'], hashed_name))
-		db.session.add(GharBare(location=form.location.data, price=form.price.data, available=form.available.data, username=form.username.data ,ghar_image=hashed_name,owner_id=session['id']))
+		db.session.add(GharBare(location=form.location.data, price=form.price.data, available=form.available.data, username=form.username.data ,ghar_image=hashed_name,owner_id=session['id'], storey=form.floor.data))
 		db.session.commit()
 		x=GharBare.query.filter_by(username=username).first()
 		db.session.add(Perception(Likes=0,Views=0,ghar_ko=x.id))
@@ -186,6 +206,23 @@ def gharjod():
 	return render_template('add.html', form=form)
 
 
+# @app.route('/gharjod',methods=['GET','POST'])
+# @login_required
+# def gharjod():
+# 	form = GharAdd()
+# 	if form.validate_on_submit():
+# 		f= form.photo.data
+# 		username=form.username.data
+# 		filename = secure_filename(f.filename)
+# 		hashed_name=createhashedfile(filename)
+# 		f.save(os.path.join(app.config['UPLOAD_FOLDER'], hashed_name))
+# 		db.session.add(GharBare(location=form.location.data, price=form.price.data, available=form.available.data, username=form.username.data ,ghar_image=hashed_name,owner_id=session['id']))
+# 		db.session.commit()
+# 		x=GharBare.query.filter_by(username=username).first()
+# 		db.session.add(Perception(Likes=0,Views=0,ghar_ko=x.id))
+# 		db.session.commit()
+# 		return redirect(url_for('home'))
+# 	return render_template('add.html', form=form)
 
 
 
@@ -221,6 +258,7 @@ def detail(ghar_id):
 		if(request.form['opinions'] != "0" and request.form['mydata'] == "0"):
 			print(type(request.form['opinions']))
 			comment_it = mongo.db.users
+
 			findusers = comment_it.find_one({'post_id': ghar_id})
 			print(type(findusers))
 			if(findusers):
@@ -257,10 +295,15 @@ def detail(ghar_id):
 
 	o = 0
 	comments_query = mongo.db.users
+	find_home = mongo.db.home
+	these_homes = find_home.find_one({'ghar_id': 2 })
+	these_home = these_homes['floor']
 	m=KaskoGhar.query.filter_by(id=session['id']).first()
 
 	n=GharBare.query.filter_by(id=ghar_id).first()
 	found = comments_query.find_one({"post_id": ghar_id})
+	print(found)
+	print("found : "  ,these_homes)
 	try:
 		if(n.ramro in m.ramro_lagyo):
 			o = 1
@@ -270,7 +313,8 @@ def detail(ghar_id):
 		return redirect(url_for('detail', ghar_id=ghar_id))
 	if(found):
 		what=found['comments']
-		return render_template('detail.html',data=n, person=m , ramrolagyokinai = o, what=what)
+		print(what)
+		return render_template('detail.html',data=n, person=m , ramrolagyokinai = o, what=what, home= these_home)
 	return render_template('detail.html',data=n, person=m , ramrolagyokinai = o)
 
 
@@ -312,7 +356,7 @@ def  testjson():
 	return render_template('test.html')
 
 #testing the ajax data which returns date and name ulto
-@app.route('/process',methods=['POST'])
+@app.route('/process',methods=['GET','POST'])
 def process():
 	email = request.form['email']
 	name = request.form['name']
@@ -323,11 +367,32 @@ def process():
 
 #testing the json data from the page learn.html
 
-@app.route('/jsonshow', methods=['GET','POST'])
-def jsonshow():
-	c=KaskoGhar.query.filter_by(username="nischal").first()
+@app.route('/jsonshow/<x>', methods=['GET','POST'])
+def jsonshow(x):
+	xes={}
+	ras={}
+	conn = create_connection("/home/nischal/Documents/search/tutorial/market.db")
+	cur = conn.cursor()
+	cur.execute("SELECT * FROM market WHERE sn=?",(x))
+	rows = cur.fetchall()
+	for count,i in enumerate(rows) :
+		xes[count]={'id':i[0] ,'S.N':i[1], 'Traded_Companies':i[2], 'No_Of_Transaction':i[3], 'Max_Price':i[4],'Min_Price':i[5],'Closing_Price':i[6],'Traded_Shares':i[7],'Amount':i[8],'Previous_Closing':i[9],'Date_Time':i[10], 'rising':True }
 
-	return jsonify({'date':datetime.now(), 'ghar':c.password })
+	print(type(xes))
+	print(xes)
+	#return json.dumps(rows)
+
+	return jsonify(xes)
+@app.route('/datas/<ids>', methods=['GET'])
+def datas(ids):
+	conn = create_connection("/home/nischal/Documents/search/tutorial/market.db")
+	cur = conn.cursor()
+	cur.execute("SELECT * FROM market WHERE sn=?",(ids))
+	i = cur.fetchone()
+	temp=0
+	temp = i[10].split('.')
+	dates=str(temp[:1])
+	return jsonify({'date': dates, 'closing' : i[5]})
 
 #this is used to render learn.html
 @app.route('/page')
@@ -412,6 +477,50 @@ def mongoget():
 		return render_template('comments.html', comment= y)
 	return render_template('search.html')		
 
+@app.route('/plot.png')
+def plot_png():
+	fig = create_figure()
+	output = io.BytesIO()
+	FigureCanvas(fig).print_png(output)
+	return Response(output.getvalue(), mimetype='image/png')
+
+def create_figure():
+	conn = create_connection("/home/nischal/Documents/search/tutorial/market.db")
+	cur = conn.cursor()
+	cur.execute("SELECT * FROM market WHERE sn=?",('2'))
+	rows = cur.fetchall()
+	dates = []
+	closing =[]
+	fig=Figure()
+	axis = fig.add_subplot(1,1,1,facecolor="#AAAAAA")
+	
+	x = db.session.query(GharBare).all()
+
+	for i in rows :
+		temp=0
+		print(i)
+		temp = i[10].split('.')
+		dates.append(str(temp[:1]))
+
+		closing.append(i[5])
+	print(type(dates))
+	print(closing)
+	ys = closing
+	xs = dates
+	# xs = range(len(price_list))
+	#ys = [random.randint(1,50) for x in xs]
+	axis.set_ylabel("min_price")
+
+	axis.set_xlabel("dates")
+	axis.tick_params(axis='x', labelrotation=10)
+	axis.plot(xs,ys)
+	axis.grid(b=True, which='minor', color='w',linewidth=0.75)
+	axis.set_title("Market of xyz")
+	return fig
+
+@app.route('/vuetest')
+def vuetest():
+	return render_template('vuetest.html')
 
 if __name__=='__main__':
 	app.run(debug=True,host='0.0.0.0')

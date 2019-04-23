@@ -28,20 +28,22 @@ class GharBare(db.Model):
 	username = db.Column(db.String(50), unique= True ,nullable=False)
 	available = db.Column(db.Date,default=date.today(),nullable=False)
 	ghar_image = db.Column(db.String(100),nullable=False,unique=False,default='default.jpg')
+	storey = db.Column(db.Integer, nullable=True)
 	owner_id = db.Column(db.Integer, db.ForeignKey('kaskoghar.id'))
 	ramro = db.relationship('Perception',backref='likes',uselist=False)
 
-	def __init__(self,location,price,username,available,owner_id,ghar_image):
+	def __init__(self,location,price,username,available,owner_id,ghar_image,storey):
 		self.location = location
 		self.price = price
 		self.username = username
 		self.available = available
 		self.owner_id=owner_id
 		self.ghar_image=ghar_image
+		self.storey = storey
 	#	self.owner=owner
 
 	def __repr__(self):
-		return '{}--{}--{}'.format(self.location,self.price,self.username)
+		return '{}--{}--{}--{}'.format(self.location,self.price,self.username,self.storey)
 
 
 

@@ -17,6 +17,7 @@ class GharAdd(FlaskForm):
 	available = DateField('available' , format='%Y-%m-%d')
 	username = StringField('username')
 	photo = FileField('photo')
+	floor = IntegerField('floor')
 
 
 	# 	<form action="" method="POST" enctype="multipart/form-data">
